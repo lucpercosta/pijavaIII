@@ -69,18 +69,20 @@ public class PrincipalLoja {
 		}
 	}
 	void ListaEstoque(int opcao){
-		String tpVeiculo=null;
 		if(opcao==1){ 
 			for(Veiculo aux : Store){
-				if(aux instanceof Moto){exibe(aux,"MOTO");}
+				if(aux instanceof Moto){exibe(aux);}
 			}
 		}else{
 			for(Veiculo aux : Store){
-				if(aux instanceof Carro){exibe(aux,"CARRO");}
+				if(aux instanceof Carro){exibe(aux);}
 			}
 		}
 	}
-	void exibe(Veiculo aux, String tipoVeiculo){ 
+	void exibe(Veiculo aux){ 
+		String tipoVeiculo="";
+		if(aux instanceof Moto){tipoVeiculo="MOTO";}
+		if(aux instanceof Carro){tipoVeiculo="CARRO";}
 		System.out.println("------------------");
 		System.out.println(" " + tipoVeiculo); 
 		System.out.println("------------------");
@@ -91,26 +93,22 @@ public class PrincipalLoja {
 		System.out.println("Cor: 			"	+ aux.getCor());
 		System.out.println("Preco: 			" 	+ aux.getPreco());
 		aux.imprimir();
+		((Moto) aux).gravar();
 	}
-	void raioxEstoque(){
-		String tpVeiculo=null; 
+	void raioxEstoque(){ 
 		for(Veiculo aux : Store){
-		if(aux instanceof Moto){tpVeiculo="MOTO";}
-		if(aux instanceof Carro){tpVeiculo="CARRO";}
-		exibe(aux,tpVeiculo);
+		exibe(aux);
 		}
 	}
 	void buscaChassi(int opcao){
-		String tpVeiculo=null;
 		int counter=0;
 		System.out.println("Informe o chassi:");
 		String chassi = teclado.next();
 		if(opcao==1){ 
 		for(Veiculo aux: Store){ 
 			if(aux instanceof Moto){
-				tpVeiculo="MOTO";
 				if(aux.getChassi().equals(chassi)){ 
-				exibe(aux,tpVeiculo);
+				exibe(aux);
 				counter++; 
 				}
 			}
@@ -118,9 +116,8 @@ public class PrincipalLoja {
 		}else{
 		for(Veiculo aux: Store){
 			if(aux instanceof Carro){ 
-				tpVeiculo="CARRO";
 				if(aux.getChassi().equals(chassi)){ 
-				exibe(aux,tpVeiculo);
+				exibe(aux);
 				}
 			}
 		}
@@ -129,31 +126,52 @@ public class PrincipalLoja {
 		if(counter==0){System.out.println("Chassi %s" + chassi + "nao encontrado!!!");}
 	}
 	void pesquisaVeiculo(int opcao){ 
-		String tpVeiculo=null;
 		int counter=0;
 		System.out.println("Informe um atributo:");
 		String atrib = teclado.next();
 		if(opcao==1){ 
 			for(Veiculo aux : Store){ 
-				tpVeiculo="MOTO";
-				if(buscaAtributo(aux,atrib,tpVeiculo)){exibe(aux,tpVeiculo);counter++;}	
+				if(buscaAtributo(aux,atrib)){exibe(aux);counter++;}	
 			}
 		}else{ 
 			for(Veiculo aux : Store){ 
-				tpVeiculo="CARRO";
-				if(buscaAtributo(aux,atrib,tpVeiculo)){exibe(aux,tpVeiculo);counter++;}	
+				if(buscaAtributo(aux,atrib)){exibe(aux);counter++;}	
 			}
 		}
 		
 		if(counter==0){System.out.println("Nenhum veiculo possui o atributo pesquisado");}
 	}
-	public boolean buscaAtributo(Veiculo aux,String atrib,String tpVeiculo){
+	public boolean buscaAtributo(Veiculo aux,String atrib){
 		boolean achei=false;
+			
 		if(aux.getChassi().equals(atrib)){achei=true;}
 		if(aux.getChassi().equals(atrib)){achei=true;}
 		if(aux.getModelo().equals(atrib)){achei=true;}
 		if(aux.getTipo().equals(atrib)){achei=true;}
 		if(aux.getCor().equals(atrib)){achei=true;}	
+		if(aux instanceof Moto){ 
+			/**
+			 * Downcast para especializar o objeto (MOTO E CARRO)
+			 * Foi necessario adicionar tambem um tratamento de excessao pois 
+			 * existe a possibilidade da busca não poder ser convertida para inteiro ou Double 
+			 * nesse caso o programa nao faz nada.
+			 */
+			try{ 
+				if(((Moto) aux).getCapTanque() == Integer.parseInt(atrib)){achei=true;}
+				if(((Moto) aux).getCilindrada() == Integer.parseInt(atrib)){achei=true;}
+			}catch(NumberFormatException a){ 
+				System.out.println("");
+			}	
+		}else{ 
+			try{ 
+				if(((Carro) aux).getCambio().equals(atrib)){achei=true;}
+				if(((Carro) aux).getMotorizacao() == Double.parseDouble(atrib)){achei=true;}
+			}catch(NumberFormatException a){
+				System.out.println("");
+			}
+		}
+		
+		
 		return achei;
 	}
 }

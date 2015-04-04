@@ -1,11 +1,22 @@
 package java3;
 import java.util.Scanner;
+import java.util.Scanner;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.FileOutputStream;
+import java.io.FileNotFoundException;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 
 public class Carro extends Veiculo {
 	 
 	private Double motorizacao; 
 	private String cambio;
 	private Scanner teclado = new Scanner(System.in); 
+	private static final long serialVersionUID = 1L;
 
 	public Carro(){
 		

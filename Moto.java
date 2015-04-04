@@ -1,12 +1,22 @@
 package java3;
 import java.util.Scanner;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.FileOutputStream;
+import java.io.FileNotFoundException;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
 public class Moto extends Veiculo implements Serializable {
 	private int cilindrada; 
 	private int capTanque;
 	private Scanner teclado = new Scanner(System.in); 
-	private static final long serialVersionUID = 5110549514946052395L;
+	private static final long serialVersionUID = 1L;
+	private transient double limitefixo = 1000.0;
+	private transient int qdadadeCadastrada;
 	
 	public Moto(){
 	}
@@ -59,6 +69,24 @@ public class Moto extends Veiculo implements Serializable {
 	public void imprimir(){ 
 		System.out.println("Cilindrada:		" + getCilindrada()); 
 		System.out.println("Cambio:			" + getCapTanque());
+	}
+	public void gravar(){ 
+		try{ 
+			ObjectOutputStream out = new ObjectOutputStream(new BufferedOutputStream(
+			new FileOutputStream("Motos.data")));
+			out.writeInt(getQdadadeCadastrada()+1);
+			setQdadadeCadastrada(getQdadadeCadastrada()+1); 
+			out.writeObject(this);
+			out.close();
+		}catch(IOException e){
+			System.out.println("Problemas com IO Exception"); 
+		}
+	}
+	public void setQdadadeCadastrada(int qdadadeCadastrada) {
+		this.qdadadeCadastrada = qdadadeCadastrada;
+	}
+	public int getQdadadeCadastrada() {
+		return qdadadeCadastrada;
 	}
 	public int getCilindrada() {
 		return cilindrada;
